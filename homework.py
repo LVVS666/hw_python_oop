@@ -1,4 +1,5 @@
 from typing import Dict
+from typing import Type
 
 
 class InfoMessage:
@@ -34,6 +35,7 @@ class Training:
 
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
+    MINUTE_CONVERT = 60
     action: int
     duration: float
     weight: float
@@ -76,22 +78,15 @@ class Training:
 class Running(Training):
     """Тренировка: бег."""
 
-    action: int
-    duration: float
-    weight: float
-
-    def __init__(self, action: int, duration: float, weight: float) -> None:
-        super().__init__(action, duration, weight)
+    COEFF_CALORIE_1: int = 18
+    COEFF_CALORIE_2: int = 20
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
-        coeff_calorie_1: int = 18
-        coeff_calorie_2: int = 20
         spent_calories = (
-            (coeff_calorie_1 * self.get_mean_speed() - coeff_calorie_2)
+            (self.COEFF_CALORIE_1 * self.get_mean_speed() - self.COEFF_CALORIE_2)
             * self.weight
             / self.M_IN_KM
-            * (self.duration * 60)
+            * (self.duration * self.MINUTE_CONVERT)
         )
         return spent_calories
 
@@ -119,7 +114,7 @@ class SportsWalking(Training):
             + (self.get_mean_speed() ** 2 // self.height)
             * coeff_callories_walk_2
             * self.weight
-        ) * (self.duration * 60)
+        ) * (self.duration * self.MINUTE_CONVERT)
         return spent_calories
 
 
@@ -158,7 +153,7 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: Dict) -> Training:
     """Прочитать данные полученные от датчиков."""
-    types_of_workout: Dict[str, type] = {
+    types_of_workout: Dict[str, Type[Training]] = {
         "SWM": Swimming,
         "WLK": SportsWalking,
         "RUN": Running,
