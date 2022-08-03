@@ -133,14 +133,13 @@ class Swimming(Training):
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
-        return (
-            self.length_pool * self.count_pool
-            / self.M_IN_KM / self.duration
-        )
+        return (self.length_pool * self.count_pool
+               / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         return (self.get_mean_speed() + 1.1) * 2 * self.weight
+
 
 def read_package(workout_type: str, data: Dict) -> Training:
     """Прочитать данные полученные от датчиков."""
@@ -151,11 +150,13 @@ def read_package(workout_type: str, data: Dict) -> Training:
     }
     return types_of_workout[workout_type](*data)
 
+
 def main(training: Training) -> None:
     """Главная функция."""
     info = training.show_training_info()
     message_info = info.get_message()
     print(message_info)
+
 
 if __name__ == "__main__":
     packages = [
