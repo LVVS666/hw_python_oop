@@ -152,6 +152,8 @@ def read_package(workout_type: str, data: Dict) -> Training:
         "WLK": SportsWalking,
         "RUN": Running,
     }
+    if workout_type not in types_of_workout:
+        raise NameError("Вид тренировки отсутствует.")
     return types_of_workout[workout_type](*data)
 
 
